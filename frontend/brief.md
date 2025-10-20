@@ -29,5 +29,40 @@ Trong đó có xem tổng doanh thu: Xem tổng doanh thu theo thời gian
 Lượng bán sản phẩm trong ngày: Số lượng sản phẩm bán được hôm nay
 Số sản phẩm trong kho (Stock): Danh sách tồn kho sản phẩm
 12. Export Excel
-Export Excel: Xuất dữ liệu đơn hàng ra file Excel để báo cáo 
-và 
+Export Excel: Xuất dữ liệu đơn hàng ra file Excel để báo cáo
+
+## CHỨC NĂNG BỔ SUNG QUAN TRỌNG
+
+13. Quản lý inventory/kho
+- Cảnh báo sắp hết hàng (low stock alert)
+- Quản lý nhập kho
+- Lịch sử xuất nhập kho
+- Tự động cập nhật tồn kho khi có đơn hàng
+
+14. Quản lý reviews/đánh giá
+- Xem/duyệt review của khách hàng
+- Trả lời review
+- Ẩn/hiện review không phù hợp
+- Thống kê rating trung bình
+
+15. Quản lý banner/content
+- Upload banner trang chủ
+- Quản lý nội dung tĩnh
+- Cấu hình slideshow
+
+16. Báo cáo và thống kê nâng cao
+- Báo cáo doanh thu theo khoảng thời gian
+- Top sản phẩm bán chạy
+- Phân tích khách hàng (RFM analysis)
+- Báo cáo hiệu quả promotion
+
+17. Quản lý hệ thống
+- Cấu hình website (tên shop, logo, thông tin liên hệ)
+- Quản lý phương thức thanh toán
+- Cấu hình phí ship
+- Quản lý template email
+
+18. Quản lý admin/nhân viên
+- Phân quyền admin (Super Admin, Staff, etc.)
+- Lịch sử hoạt động admin (audit log)
+- Quản lý tài khoản nhân viên 
