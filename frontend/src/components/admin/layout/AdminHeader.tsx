@@ -27,7 +27,7 @@ export default function AdminHeader() {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
-    }, 150); 
+    }, 150);
   };
 
   const handleDropdownMouseEnter = () => {
@@ -75,6 +75,7 @@ export default function AdminHeader() {
                   className='bg-transparent border-0 hover:bg-gray-100 focus:bg-gray-100 data-[state=open]:bg-gray-100 shadow-none focus-visible:ring-0 group'
                 >
                   <Box />
+
                   Product
                   <ChevronUp
                     className={`w-3 h-3 transition-transform duration-200 ${activeDropdown === 'product' ? 'rotate-180' : ''
@@ -91,17 +92,28 @@ export default function AdminHeader() {
               >
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    All products
+                    <Link to="/admin/products">
+                      All products
+                    </Link>
+
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    Create product
+                    <Link to="/admin/products/new">
+
+                      Create product
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    Categories
+                    <Link to="/admin/products/categories">
+                      Categories
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    Inventory
+                    <Link to="/admin/products/inventory">
+
+                      Inventory
+                    </Link>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -140,7 +152,9 @@ export default function AdminHeader() {
               >
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    All Orders
+                    <Link to="/admin/orders">
+                      All Orders
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     Pending Orders
