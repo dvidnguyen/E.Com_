@@ -12,6 +12,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
+// Import preload functions
+const preloadFunctions = {
+  dashboard: () => import('@/pages/admin/dashboard/DashboardPage'),
+  products: () => import('@/pages/admin/products/ProductListPage'),
+  productForm: () => import('@/pages/admin/products/ProductFormPage'),
+  categories: () => import('@/pages/admin/products/CategoryPage'),
+  inventory: () => import('@/pages/admin/products/InventoryPage'),
+  orders: () => import('@/pages/admin/orders/OrderListPage'),
+  orderDetail: () => import('@/pages/admin/orders/OrderDetailPage'),
+};
+
 export default function AdminHeader() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const timeoutRef = useRef<number | null>(null);
@@ -37,6 +48,15 @@ export default function AdminHeader() {
     }
   };
 
+  // Preload function với delay
+  const preloadComponent = (preloadFn: () => Promise<unknown>) => {
+    setTimeout(() => {
+      preloadFn().catch(() => {
+        // Ignore preload errors
+      });
+    }, 100);
+  };
+
   return (
     <div className='p-3 border-b flex items-center justify-between fixed top-0 left-0 right-0 bg-white z-10 shadow-sm'>
       <div className='flex items-center gap-2 padding-left-2 '>
@@ -53,6 +73,7 @@ export default function AdminHeader() {
             <Button
               variant='ghost'
               className='bg-transparent border-0 hover:bg-gray-100 focus:bg-gray-100 data-[state=open]:bg-gray-100 shadow-none focus-visible:ring-0 group'
+              onMouseEnter={() => preloadComponent(preloadFunctions.dashboard)}
             >
               <ChartColumnBig />
               Dashboard
@@ -91,30 +112,27 @@ export default function AdminHeader() {
                 onMouseLeave={handleMouseLeave}
               >
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <Link to="/admin/products">
+                  <Link to="/admin/products">
+                    <DropdownMenuItem onMouseEnter={() => preloadComponent(preloadFunctions.products)}>
                       All products
-                    </Link>
-
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link to="/admin/products/new">
-
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link to="/admin/products/new">
+                    <DropdownMenuItem onMouseEnter={() => preloadComponent(preloadFunctions.productForm)}>
                       Create product
-                    </Link>
-                  </DropdownMenuItem>
+                    </DropdownMenuItem>
+                  </Link>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Link to="/admin/products/categories">
+                  <Link to="/admin/products/categories">
+                    <DropdownMenuItem onMouseEnter={() => preloadComponent(preloadFunctions.categories)}>
                       Categories
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link to="/admin/products/inventory">
-
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link to="/admin/products/inventory">
+                    <DropdownMenuItem onMouseEnter={() => preloadComponent(preloadFunctions.inventory)}>
                       Inventory
-                    </Link>
-                  </DropdownMenuItem>
+                    </DropdownMenuItem>
+                  </Link>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -151,11 +169,11 @@ export default function AdminHeader() {
                 onMouseLeave={handleMouseLeave}
               >
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <Link to="/admin/orders">
+                  <Link to="/admin/orders">
+                    <DropdownMenuItem onMouseEnter={() => preloadComponent(preloadFunctions.orders)}>
                       All Orders
-                    </Link>
-                  </DropdownMenuItem>
+                    </DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem>
                     Pending Orders
                   </DropdownMenuItem>

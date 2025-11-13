@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Edit, Trash2 } from "lucide-react";
+import AdminBreadcrumb from "@/components/admin/layout/AdminBreadcrumb";
 
 interface Category {
   id: number;
@@ -100,6 +101,16 @@ export default function CategoryPage() {
 
   return (
     <div className="space-y-6 p-6">
+      {/* Breadcrumb */}
+      <AdminBreadcrumb
+        items={[
+          { label: 'Home', href: '/admin/dashboard' },
+          { label: 'Admin', href: '/admin' },
+          { label: 'Products', href: '/admin/products' },
+          { label: 'Categories', isActive: true }
+        ]}
+      />
+
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-bold">Categories</h1>

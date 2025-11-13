@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, Upload, X } from "lucide-react";
+import AdminBreadcrumb from "@/components/admin/layout/AdminBreadcrumb";
 
 interface Variant {
   id: number;
@@ -18,6 +20,9 @@ interface Variant {
 }
 
 export default function ProductFormPage() {
+  const { id } = useParams();
+  const isEditing = Boolean(id);
+
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -65,15 +70,30 @@ export default function ProductFormPage() {
 
   return (
     <div className="space-y-6 p-6">
+      {/* Breadcrumb */}
+      <AdminBreadcrumb
+        items={[
+          { label: 'Home', href: '/admin/dashboard' },
+          { label: 'Admin', href: '/admin' },
+          { label: 'Products', href: '/admin/products' },
+          { label: isEditing ? `Edit Product #${id}` : 'Create Product', isActive: true }
+        ]}
+      />
+
       {/* Page Header with Actions */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Create Product</h1>
+        <div>
+          <h1 className="text-3xl font-bold">{isEditing ? 'Edit Product' : 'Create Product'}</h1>
+          <p className="text-muted-foreground">
+            {isEditing ? 'Update product information and variants' : 'Add a new product to your inventory'}
+          </p>
+        </div>
         <div className="flex items-center gap-3">
           <Button variant="ghost" onClick={handleCancel}>
             Cancel
           </Button>
           <Button onClick={handleSave}>
-            Save Product
+            {isEditing ? 'Update Product' : 'Save Product'}
           </Button>
         </div>
       </div>

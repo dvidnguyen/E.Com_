@@ -2,15 +2,7 @@ import StatCard from "@/components/admin/dashboard/StatCard";
 import RecentOrders from "@/components/admin/dashboard/RecentOrders";
 import TopProducts from "@/components/admin/dashboard/TopProducts";
 import VisitorsChart from "@/components/admin/dashboard/VisitorsChart";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator
-} from '@/components/ui/breadcrumb'
-import { House } from "lucide-react";
+import AdminBreadcrumb from "@/components/admin/layout/AdminBreadcrumb";
 
 export default function DashboardPage() {
   const stats = [
@@ -45,26 +37,7 @@ export default function DashboardPage() {
       {/* Header Section with Primary Background */}
       <div className="  px-8 py-8 pb-4">
         {/* Breadcrumb */}
-        <div className="mb-6">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href='/admin/dashboard' className='flex items-center gap-2 '>
-                  <House className="w-4 h-4" />
-                  Home
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="text-blue-200"> / </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <BreadcrumbLink href='/admin' className="">Admin</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="text-blue-200"> / </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <BreadcrumbPage className=" font-medium">Dashboard</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </div>
+        <AdminBreadcrumb />
 
         {/* Page Title */}
         <div>

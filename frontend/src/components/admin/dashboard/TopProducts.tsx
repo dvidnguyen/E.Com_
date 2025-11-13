@@ -15,28 +15,31 @@ interface Product {
   price: number;
   stock: number;
   status: 'active' | 'inactive';
+  publishStatus: 'published' | 'draft';
+  stockStatus: 'in_stock' | 'out_of_stock';
   sales: number;
   revenue: number;
 }
 
 const mockProducts: Product[] = [
-  { id: 1, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-1.png", name: "Laptop Gaming ASUS ROG", category: "Electronics", price: 1299, stock: 45, status: "active", sales: 342, revenue: 444558 },
-  { id: 2, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-2.png", name: "iPhone 15 Pro Max", category: "Electronics", price: 1199, stock: 23, status: "active", sales: 289, revenue: 346411 },
-  { id: 3, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-3.png", name: "Sony WH-1000XM5", category: "Audio", price: 399, stock: 0, status: "inactive", sales: 156, revenue: 62244 },
-  { id: 4, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-4.png", name: "Apple Watch Series 9", category: "Wearables", price: 399, stock: 12, status: "active", sales: 134, revenue: 53466 },
-  { id: 5, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-5.png", name: "Razer DeathAdder V3", category: "Gaming", price: 69, stock: 89, status: "active", sales: 98, revenue: 6762 },
-  { id: 6, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-6.png", name: "MacBook Pro M3", category: "Electronics", price: 1999, stock: 15, status: "active", sales: 87, revenue: 173913 },
-  { id: 7, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-7.png", name: "Samsung Galaxy S24", category: "Electronics", price: 899, stock: 34, status: "active", sales: 76, revenue: 68324 },
-  { id: 8, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-8.png", name: "Nintendo Switch OLED", category: "Gaming", price: 349, stock: 0, status: "inactive", sales: 65, revenue: 22685 },
-  { id: 9, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-9.png", name: "iPad Pro 12.9", category: "Electronics", price: 1099, stock: 28, status: "active", sales: 54, revenue: 59346 },
-  { id: 10, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-10.png", name: "AirPods Pro 2", category: "Audio", price: 249, stock: 67, status: "active", sales: 43, revenue: 10707 },
-  { id: 11, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-11.png", name: "Dell XPS 13", category: "Electronics", price: 1299, stock: 19, status: "active", sales: 38, revenue: 49362 },
-  { id: 12, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-12.png", name: "Mechanical Keyboard", category: "Gaming", price: 159, stock: 45, status: "active", sales: 32, revenue: 5088 },
+  { id: 1, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-1.png", name: "Laptop Gaming ASUS ROG", category: "Electronics", price: 1299, stock: 45, status: "active", publishStatus: "published", stockStatus: "in_stock", sales: 342, revenue: 444558 },
+  { id: 2, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-2.png", name: "iPhone 15 Pro Max", category: "Electronics", price: 1199, stock: 23, status: "active", publishStatus: "published", stockStatus: "in_stock", sales: 289, revenue: 346411 },
+  { id: 3, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-3.png", name: "Sony WH-1000XM5", category: "Audio", price: 399, stock: 0, status: "inactive", publishStatus: "draft", stockStatus: "out_of_stock", sales: 156, revenue: 62244 },
+  { id: 4, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-4.png", name: "Apple Watch Series 9", category: "Wearables", price: 399, stock: 12, status: "active", publishStatus: "published", stockStatus: "in_stock", sales: 134, revenue: 53466 },
+  { id: 5, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-5.png", name: "Razer DeathAdder V3", category: "Gaming", price: 69, stock: 89, status: "active", publishStatus: "published", stockStatus: "in_stock", sales: 98, revenue: 6762 },
+  { id: 6, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-6.png", name: "MacBook Pro M3", category: "Electronics", price: 1999, stock: 15, status: "active", publishStatus: "published", stockStatus: "in_stock", sales: 87, revenue: 173913 },
+  { id: 7, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-7.png", name: "Samsung Galaxy S24", category: "Electronics", price: 899, stock: 34, status: "active", publishStatus: "published", stockStatus: "in_stock", sales: 76, revenue: 68324 },
+  { id: 8, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-8.png", name: "Nintendo Switch OLED", category: "Gaming", price: 349, stock: 0, status: "inactive", publishStatus: "draft", stockStatus: "out_of_stock", sales: 65, revenue: 22685 },
+  { id: 9, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-9.png", name: "iPad Pro 12.9", category: "Electronics", price: 1099, stock: 28, status: "active", publishStatus: "published", stockStatus: "in_stock", sales: 54, revenue: 59346 },
+  { id: 10, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-10.png", name: "AirPods Pro 2", category: "Audio", price: 249, stock: 67, status: "active", publishStatus: "published", stockStatus: "in_stock", sales: 43, revenue: 10707 },
+  { id: 11, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-11.png", name: "Dell XPS 13", category: "Electronics", price: 1299, stock: 19, status: "active", publishStatus: "draft", stockStatus: "in_stock", sales: 38, revenue: 49362 },
+  { id: 12, image: "https://cdn.shadcnstudio.com/ss-assets/blocks/data-table/image-12.png", name: "Mechanical Keyboard", category: "Gaming", price: 159, stock: 45, status: "active", publishStatus: "published", stockStatus: "in_stock", sales: 32, revenue: 5088 },
 ];
 
 const categories = ["All Categories", "Electronics", "Audio", "Wearables", "Gaming"];
-const stockOptions = ["All Stock", "In Stock", "Low Stock", "Out of Stock"];
+const stockOptions = ["All Stock", "In Stock", "Out of Stock"];
 const statusOptions = ["All Status", "Active", "Inactive"];
+const publishOptions = ["All Publish", "Published", "Draft"];
 
 export default function ProductsDataTable() {
   // Filter states
@@ -44,6 +47,7 @@ export default function ProductsDataTable() {
   const [categoryFilter, setCategoryFilter] = useState("All Categories");
   const [stockFilter, setStockFilter] = useState("All Stock");
   const [statusFilter, setStatusFilter] = useState("All Status");
+  const [publishFilter, setPublishFilter] = useState("All Publish");
   const [showFilters, setShowFilters] = useState(false);
 
   // Pagination states - Task 3.1: New pageSize state
@@ -56,15 +60,16 @@ export default function ProductsDataTable() {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = categoryFilter === "All Categories" || product.category === categoryFilter;
       const matchesStock = stockFilter === "All Stock" ||
-        (stockFilter === "In Stock" && product.stock > 10) ||
-        (stockFilter === "Low Stock" && product.stock > 0 && product.stock <= 10) ||
-        (stockFilter === "Out of Stock" && product.stock === 0);
+        (stockFilter === "In Stock" && product.stockStatus === "in_stock") ||
+        (stockFilter === "Out of Stock" && product.stockStatus === "out_of_stock");
       const matchesStatus = statusFilter === "All Status" ||
         product.status === statusFilter.toLowerCase();
+      const matchesPublish = publishFilter === "All Publish" ||
+        product.publishStatus === publishFilter.toLowerCase();
 
-      return matchesSearch && matchesCategory && matchesStock && matchesStatus;
+      return matchesSearch && matchesCategory && matchesStock && matchesStatus && matchesPublish;
     });
-  }, [searchTerm, categoryFilter, stockFilter, statusFilter]);
+  }, [searchTerm, categoryFilter, stockFilter, statusFilter, publishFilter]);
 
   // Pagination logic - Task 3.2: Updated to use pageSize
   const totalPages = Math.ceil(filteredProducts.length / pageSize);
@@ -74,35 +79,24 @@ export default function ProductsDataTable() {
   // Reset pagination when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, categoryFilter, stockFilter, statusFilter]);
+  }, [searchTerm, categoryFilter, stockFilter, statusFilter, publishFilter]);
 
-  const getStockBadge = (stock: number) => {
-    const getStockStyles = (availability: string) => {
-      const styles = {
-        'In Stock':
-          'bg-green-600/10 text-green-600 focus-visible:ring-green-600/20 dark:bg-green-400/10 dark:text-green-400 dark:focus-visible:ring-green-400/40 [a&]:hover:bg-green-600/5 dark:[a&]:hover:bg-green-400/5',
-        'Out of Stock':
-          'bg-destructive/10 [a&]:hover:bg-destructive/5 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 text-destructive',
-        Limited:
-          'bg-amber-600/10 text-amber-600 focus-visible:ring-amber-600/20 dark:bg-amber-400/10 dark:text-amber-400 dark:focus-visible:ring-amber-400/40 [a&]:hover:bg-amber-600/5 dark:[a&]:hover:bg-amber-400/5'
-      }[availability]
-
-      return styles;
-    };
-
-    if (stock === 0) {
-      return <Badge className={getStockStyles('Out of Stock')}>Out of Stock</Badge>;
-    }
-    if (stock <= 10) {
-      return <Badge className={getStockStyles('Limited')}>Low Stock</Badge>;
-    }
-    return <Badge className={getStockStyles('In Stock')}>In Stock</Badge>;
+  const getStockBadge = (stockStatus: string) => {
+    return stockStatus === 'in_stock'
+      ? <Badge className="bg-green-600/10 text-green-600">In Stock</Badge>
+      : <Badge className="bg-destructive/10 text-destructive">Out of Stock</Badge>;
   };
 
-  const getStatusBadge = (status: string) => {
+  const getActivityStatusBadge = (status: string) => {
     return status === 'active'
       ? <Badge variant="default">Active</Badge>
       : <Badge variant="secondary">Inactive</Badge>;
+  };
+
+  const getPublishStatusBadge = (status: string) => {
+    return status === 'published'
+      ? <Badge className="bg-blue-600/10 text-blue-600">Published</Badge>
+      : <Badge className="bg-yellow-600/10 text-yellow-600">Draft</Badge>;
   };
 
   const handleAction = (action: string, productId: number) => {
@@ -221,6 +215,19 @@ export default function ProductsDataTable() {
                   </SelectContent>
                 </Select>
               </div>
+              <div className="space-y-2 flex-1">
+                <label className="text-sm font-medium">Publish Status</label>
+                <Select value={publishFilter} onValueChange={setPublishFilter}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {publishOptions.map(option => (
+                      <SelectItem key={option} value={option}>{option}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
         )}
@@ -236,8 +243,9 @@ export default function ProductsDataTable() {
                 <TableHead>Product</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Price</TableHead>
+                <TableHead>Activity</TableHead>
+                <TableHead>Publish</TableHead>
                 <TableHead>Stock</TableHead>
-                <TableHead>Status</TableHead>
                 <TableHead>Sales</TableHead>
                 <TableHead>Revenue</TableHead>
                 <TableHead className="w-12">Actions</TableHead>
@@ -264,13 +272,9 @@ export default function ProductsDataTable() {
                   </TableCell>
                   <TableCell>{product.category}</TableCell>
                   <TableCell>${product.price.toLocaleString()}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <span>{product.stock}</span>
-                      {getStockBadge(product.stock)}
-                    </div>
-                  </TableCell>
-                  <TableCell>{getStatusBadge(product.status)}</TableCell>
+                  <TableCell>{getActivityStatusBadge(product.status)}</TableCell>
+                  <TableCell>{getPublishStatusBadge(product.publishStatus)}</TableCell>
+                  <TableCell>{getStockBadge(product.stockStatus)}</TableCell>
                   <TableCell>{product.sales}</TableCell>
                   <TableCell>${product.revenue.toLocaleString()}</TableCell>
                   <TableCell>

@@ -9,6 +9,7 @@ import { OrderTimelineCard } from "@/components/admin/order/OrderTimelineCard";
 import { OrderActionsCard } from "@/components/admin/order/OrderActionsCard";
 import { CustomerCard } from "@/components/admin/order/CustomerCard";
 import { AddressCard } from "@/components/admin/order/AddressCard";
+import AdminBreadcrumb from "@/components/admin/layout/AdminBreadcrumb";
 
 type PaymentStatus = "cash_on_delivery" | "bank_transfer" | "refunded";
 type FulfillmentStatus = "pending" | "shipping" | "completed";
