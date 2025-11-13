@@ -27,3 +27,6 @@ type SessionDTO struct {
 func (dto UserDTO) ToEntity() (*domain.User, error) {
 	return domain.NewUser(dto.Id, dto.UserName, dto.Email, dto.Password, dto.Salt, dto.Phone, domain.GetRole(dto.Role))
 }
+func (dto SessionDTO) ToEntity() (*domain.Session, error) {
+	return domain.NewSession(dto.Id, dto.UserId, dto.RefreshToken, dto.AccessExpAt, dto.RefreshExpAt), nil
+}

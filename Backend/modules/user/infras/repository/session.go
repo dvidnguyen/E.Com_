@@ -1,9 +1,11 @@
 package repository
 
 import (
+	"Backend/common"
 	"Backend/modules/user/domain"
 	"context"
 
+	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
@@ -27,4 +29,17 @@ func (repo sessionDB) Create(ctx context.Context, data *domain.Session) error {
 	}
 
 	return repo.db.Table(TbSessionName).Create(&dto).Error
+}
+func (repo sessionDB) Find(ctx context.Context, id string) (*domain.Session, error) {
+	var dto SessionDTO
+
+	if err := repo.db.Table(TbSessionName).Where("id = ?", id).First(&dto).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, common.ErrRecordNotFound
+		}
+
+		return nil, err
+	}
+
+	return dto.ToEntity()
 }

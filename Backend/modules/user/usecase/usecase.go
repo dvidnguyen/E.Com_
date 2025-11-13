@@ -3,6 +3,8 @@ package usecase
 import (
 	"Backend/modules/user/domain"
 	"context"
+
+	"github.com/google/uuid"
 )
 
 type UseCase interface {
@@ -42,6 +44,7 @@ type UserRepository interface {
 }
 type UserQueryRepository interface {
 	FindByEmail(ctx context.Context, email string) (*domain.User, error)
+	Find(ctx context.Context, id uuid.UUID) (*domain.User, error)
 }
 
 type UserCmdRepository interface {
@@ -49,5 +52,15 @@ type UserCmdRepository interface {
 }
 
 type SessionRepository interface {
+	SessionQueryRepository
+	SessionCmdRepository
+}
+type SessionQueryRepository interface {
+	Find(ctx context.Context, email string) (*domain.Session, error)
+	//FindByRefreshToken(ctx context.Context, rt string) (*domain.Session, error)
+	//CountSessionByUserId(ctx context.Context, userId uuid.UUID) (int64, error)
+}
+type SessionCmdRepository interface {
 	Create(ctx context.Context, data *domain.Session) error
+	//Delete(ctx context.Context, id uuid.UUID) error
 }
