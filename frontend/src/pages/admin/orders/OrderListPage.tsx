@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Search, MoreHorizontal, Eye, Printer, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, MoreHorizontal, Search, Eye, Edit, Trash2, Calendar, Printer, X } from "lucide-react";
 import { DateRangePicker } from "@/components/admin/order/DateRangePicker";
+import AdminBreadcrumb from "@/components/admin/layout/AdminBreadcrumb";
 
 interface Order {
   id: string;
@@ -171,6 +172,9 @@ export default function OrderListPage() {
 
   return (
     <div className="space-y-6 p-6">
+      {/* Breadcrumb */}
+      <AdminBreadcrumb />
+
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-bold">Orders</h1>

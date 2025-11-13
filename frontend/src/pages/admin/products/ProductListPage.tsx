@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Search, MoreHorizontal, Eye, Edit, Trash2, Plus } from "lucide-react";
+import { MoreHorizontal, Search, Plus, Eye, Edit, Trash2 } from "lucide-react";
+import AdminBreadcrumb from "@/components/admin/layout/AdminBreadcrumb";
 
 interface Product {
   id: number;
@@ -123,9 +124,15 @@ export default function ProductListPage() {
 
   return (
     <div className="space-y-6 p-6">
+      {/* Breadcrumb */}
+      <AdminBreadcrumb />
+
       {/* Page Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Products</h1>
+        <div>
+          <h1 className="text-3xl font-bold">Products</h1>
+          <p className="text-muted-foreground">Manage your product inventory</p>
+        </div>
         <Button onClick={() => handleAction('add', 0)}>
           <Plus className="w-4 h-4 mr-2" />
           Add New Product
