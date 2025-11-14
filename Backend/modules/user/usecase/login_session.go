@@ -18,7 +18,7 @@ func NewLoginUC(userRepo UserRepository, sessionRepo SessionRepository, hasher H
 	return &LoginUC{userRepo: userRepo, sessionRepo: sessionRepo, hasher: hasher, tokenProvider: tokenProvider}
 }
 
-func (uc *LoginUC) Login(ctx context.Context, dto EmailPasswordLogin) (*TokenResponse, error) {
+func (uc *LoginUC) Login(ctx context.Context, dto EmailPasswordLoginDTO) (*TokenResponseDTO, error) {
 	// 1.Find user by email
 	user, err := uc.userRepo.FindByEmail(ctx, dto.Email)
 
@@ -49,7 +49,7 @@ func (uc *LoginUC) Login(ctx context.Context, dto EmailPasswordLogin) (*TokenRes
 	}
 	// 5. return token
 
-	return &TokenResponse{
+	return &TokenResponseDTO{
 		AccessToken:           accessToken,
 		AccessTokenExpiresAt:  uc.tokenProvider.TokenExpireInSeconds(),
 		RefreshToken:          refreshToken,

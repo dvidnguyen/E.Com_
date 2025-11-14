@@ -1,18 +1,18 @@
 package usecase
 
-type EmailPasswordRegistration struct {
+type EmailPasswordRegistrationDTO struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required,min=8"`
 	UserName string `json:"userName" binding:"required"`
 	Phone    string `json:"phone" binding:"required"`
 }
 
-type EmailPasswordLogin struct {
+type EmailPasswordLoginDTO struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required"`
 }
 
-type TokenResponse struct {
+type TokenResponseDTO struct {
 	AccessToken           string `json:"access_token"`
 	AccessTokenExpiresAt  int    `json:"access_exp_at"`
 	RefreshToken          string `json:"refresh_token"`

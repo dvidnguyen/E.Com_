@@ -16,7 +16,7 @@ func NewService(uc usecase.UseCase) *service {
 }
 func (s *service) handleRegister() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var dto usecase.EmailPasswordRegistration
+		var dto usecase.EmailPasswordRegistrationDTO
 		if err := c.BindJSON(&dto); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -32,7 +32,7 @@ func (s *service) handleRegister() gin.HandlerFunc {
 }
 func (s *service) handleLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var dto usecase.EmailPasswordLogin
+		var dto usecase.EmailPasswordLoginDTO
 		if err := c.BindJSON(&dto); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -46,8 +46,26 @@ func (s *service) handleLogin() gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{"data": tokenResponse})
 	}
 }
+func (s *service) handleRefreshToken() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var dto struct {
+			RefreshToken string `json:"refresh_token"`
+		}
+		if err := c.BindJSON(&dto); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		tokenResponse, err := s.uc.RefreshToken(c.Request.Context(), dto.RefreshToken)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
+		c.JSON(http.StatusOK, gin.H{"data": tokenResponse})
+	}
+}
 func (s *service) Routes(g *gin.RouterGroup) {
 	g.POST("/auth/register", s.handleRegister())
 	g.POST("/auth/login", s.handleLogin())
+	g.POST("/auth/refresh-token", s.handleRefreshToken())
 }

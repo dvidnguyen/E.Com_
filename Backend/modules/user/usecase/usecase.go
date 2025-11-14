@@ -8,9 +8,9 @@ import (
 )
 
 type UseCase interface {
-	Register(ctx context.Context, dto EmailPasswordRegistration) error
-	Login(ctx context.Context, dto EmailPasswordLogin) (*TokenResponse, error)
-	//RefreshToken(ctx context.Context, refreshToken string) (*TokenResponse, error)
+	Register(ctx context.Context, dto EmailPasswordRegistrationDTO) error
+	Login(ctx context.Context, dto EmailPasswordLoginDTO) (*TokenResponseDTO, error)
+	RefreshToken(ctx context.Context, refreshToken string) (*TokenResponseDTO, error)
 }
 
 type TokenProvider interface {
@@ -28,13 +28,14 @@ type Hasher interface {
 type useCase struct {
 	*RegisterUC
 	*LoginUC
-	//*refreshTokenUC
+	*RefreshTokenUC
 }
 
 func NewUseCase(repoUser UserRepository, repoSession SessionRepository, hasher Hasher, tokenProvider TokenProvider) *useCase {
 	return &useCase{
-		RegisterUC: NewRegisterUC(repoUser, repoUser, hasher),
-		LoginUC:    NewLoginUC(repoUser, repoSession, hasher, tokenProvider),
+		RegisterUC:     NewRegisterUC(repoUser, repoUser, hasher),
+		LoginUC:        NewLoginUC(repoUser, repoSession, hasher, tokenProvider),
+		RefreshTokenUC: NewRefreshTokenUC(repoUser, repoSession, tokenProvider, hasher),
 	}
 }
 
@@ -57,10 +58,10 @@ type SessionRepository interface {
 }
 type SessionQueryRepository interface {
 	Find(ctx context.Context, email string) (*domain.Session, error)
-	//FindByRefreshToken(ctx context.Context, rt string) (*domain.Session, error)
+	FindByRefreshToken(ctx context.Context, rt string) (*domain.Session, error)
 	//CountSessionByUserId(ctx context.Context, userId uuid.UUID) (int64, error)
 }
 type SessionCmdRepository interface {
 	Create(ctx context.Context, data *domain.Session) error
-	//Delete(ctx context.Context, id uuid.UUID) error
+	Delete(ctx context.Context, id uuid.UUID) error
 }
