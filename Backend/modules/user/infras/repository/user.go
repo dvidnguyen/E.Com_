@@ -1,9 +1,11 @@
 package repository
 
 import (
+	"Backend/common"
 	"Backend/modules/user/domain"
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -42,4 +44,16 @@ func (r *userRepository) Create(ctx context.Context, data *domain.User) error {
 		return err
 	}
 	return nil
+}
+
+func (repo userRepository) Find(ctx context.Context, id uuid.UUID) (*domain.User, error) {
+	var dto UserDTO
+
+	if err := repo.db.Table(TbName).Where("id = ?", id).First(&dto).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, common.ErrRecordNotFound
+		}
+		return nil, err
+	}
+	return dto.ToEntity()
 }

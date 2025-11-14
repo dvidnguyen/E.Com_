@@ -18,7 +18,7 @@ type RegisterUC struct {
 func NewRegisterUC(userQuery UserQueryRepository, userCmd UserCmdRepository, hasher Hasher) *RegisterUC {
 	return &RegisterUC{userQuery: userQuery, userCmd: userCmd, hasher: hasher}
 }
-func (uc *RegisterUC) Register(ctx context.Context, dto EmailPasswordRegistration) error {
+func (uc *RegisterUC) Register(ctx context.Context, dto EmailPasswordRegistrationDTO) error {
 	// 1. Find User by email
 	// 1.1 Found : return error (email exited)
 	// 2. Generate salt
@@ -31,7 +31,7 @@ func (uc *RegisterUC) Register(ctx context.Context, dto EmailPasswordRegistratio
 		return domain.ErrEmailHasExisted
 	}
 
-	if err != nil && !errors.Is(err, common.ErrRecordNotFound) {
+	if err != nil && !errors.Is(err, domain.ErrEmailNotFound) {
 		return err
 	}
 	salt, err := uc.hasher.RandomStr(30)
