@@ -52,13 +52,13 @@ func (uc RefreshTokenUC) RefreshToken(ctx context.Context, refreshToken string) 
 		return nil, err
 	}
 	go func() {
-		_ = uc.sessionRepo.Delete(ctx, sessionId)
+		_ = uc.sessionRepo.Delete(ctx, session.Id())
 	}()
 
 	return &TokenResponseDTO{
 		AccessToken:           accessToken,
 		AccessTokenExpiresAt:  uc.tokenProvider.TokenExpireInSeconds(),
-		RefreshToken:          refreshToken,
+		RefreshToken:          newRefreshToken,
 		RefreshTokenExpiresAt: uc.tokenProvider.RefreshExpireInSeconds(),
 	}, nil
 }

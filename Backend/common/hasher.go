@@ -1,4 +1,4 @@
-package component
+package common
 
 import (
 	"crypto/rand"

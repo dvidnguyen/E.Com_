@@ -59,7 +59,7 @@ type SessionRepository interface {
 type SessionQueryRepository interface {
 	Find(ctx context.Context, email string) (*domain.Session, error)
 	FindByRefreshToken(ctx context.Context, rt string) (*domain.Session, error)
-	//CountSessionByUserId(ctx context.Context, userId uuid.UUID) (int64, error)
+	CountSessionByUserId(ctx context.Context, userId uuid.UUID) (int64, error)
 }
 type SessionCmdRepository interface {
 	Create(ctx context.Context, data *domain.Session) error

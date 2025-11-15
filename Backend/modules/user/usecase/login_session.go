@@ -25,6 +25,16 @@ func (uc *LoginUC) Login(ctx context.Context, dto EmailPasswordLoginDTO) (*Token
 	if err != nil {
 		return nil, err // repo đã chuẩn hóa lỗi rồi
 	}
+
+	//count, err := uc.sessionRepo.CountSessionByUserId(ctx, user.Id())
+	//if err != nil {
+	//	return nil, err
+	//}
+	//if count < 0 || count > 5 {
+	//	return nil, domain.ErrTooManyLogin
+	//
+	//}
+
 	// 2. hash password with password + salt
 	if ok := uc.hasher.CompareHashPassword(user.Password(), user.Salt(), dto.Password); !ok {
 		return nil, domain.ErrInvalidEmailPassword
