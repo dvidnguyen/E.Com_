@@ -11,6 +11,7 @@ type UseCase interface {
 	Register(ctx context.Context, dto EmailPasswordRegistrationDTO) error
 	Login(ctx context.Context, dto EmailPasswordLoginDTO) (*TokenResponseDTO, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*TokenResponseDTO, error)
+	ChangePassword(ctx context.Context, dto ChangePasswordDTO, userId uuid.UUID) error
 }
 
 type TokenProvider interface {
@@ -29,6 +30,7 @@ type useCase struct {
 	*RegisterUC
 	*LoginUC
 	*RefreshTokenUC
+	*ChangePasswordUC
 }
 
 func NewUseCase(repoUser UserRepository, repoSession SessionRepository, hasher Hasher, tokenProvider TokenProvider) *useCase {
@@ -36,6 +38,10 @@ func NewUseCase(repoUser UserRepository, repoSession SessionRepository, hasher H
 		RegisterUC:     NewRegisterUC(repoUser, repoUser, hasher),
 		LoginUC:        NewLoginUC(repoUser, repoSession, hasher, tokenProvider),
 		RefreshTokenUC: NewRefreshTokenUC(repoUser, repoSession, tokenProvider, hasher),
+		ChangePasswordUC: NewChangePasswordUC(
+			repoUser,
+			hasher,
+		),
 	}
 }
 
@@ -50,6 +56,7 @@ type UserQueryRepository interface {
 
 type UserCmdRepository interface {
 	Create(ctx context.Context, data *domain.User) error
+	UpdatePassword(ctx context.Context, id uuid.UUID, newPassword string) error
 }
 
 type SessionRepository interface {
