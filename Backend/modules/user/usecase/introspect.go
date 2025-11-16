@@ -29,18 +29,18 @@ func (uc *IntrospectUC) IntrospectToken(ctx context.Context, accessToken string)
 
 	claims, err := uc.tokenPaser.ParseToken(ctx, accessToken)
 	if err != nil {
-		return nil, err
+		return nil, common.ErrInternalServerError.WithDebug(err.Error())
 	}
 	userId := uuid.MustParse(claims.Subject)
 	sessionId := uuid.MustParse(claims.ID)
 	// check session
 	if _, err := uc.sessionQueryRepo.Find(ctx, sessionId.String()); err != nil {
-		return nil, err
+		return nil, common.ErrInternalServerError.WithDebug(err.Error())
 	}
 
 	user, err := uc.userQueryRepo.Find(ctx, userId)
 	if err != nil {
-		return nil, err
+		return nil, common.ErrInternalServerError.WithDebug(err.Error())
 	}
 
 	return common.NewRequester(user.Id(), sessionId, user.UserName(), user.Phone(), user.Role().String()), nil

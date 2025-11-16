@@ -5,6 +5,8 @@ import (
 	"Backend/modules/user/domain"
 	"context"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 type LoginUC struct {
@@ -23,6 +25,9 @@ func (uc *LoginUC) Login(ctx context.Context, dto EmailPasswordLoginDTO) (*Token
 	user, err := uc.userRepo.FindByEmail(ctx, dto.Email)
 
 	if err != nil {
+		if errors.Is(err, common.ErrRecordNotFound) {
+			return nil, common.ErrBadRequest.WithError(domain.ErrInvalidEmailPassword.Error())
+		}
 		return nil, err // repo đã chuẩn hóa lỗi rồi
 	}
 
@@ -37,15 +42,16 @@ func (uc *LoginUC) Login(ctx context.Context, dto EmailPasswordLoginDTO) (*Token
 
 	// 2. hash password with password + salt
 	if ok := uc.hasher.CompareHashPassword(user.Password(), user.Salt(), dto.Password); !ok {
-		return nil, domain.ErrInvalidEmailPassword
+		return nil, common.ErrBadRequest.WithDebug(domain.ErrInvalidEmailPassword.Error())
 	}
+
 	// 3. issue token
 	userID := user.Id()
 	sessionID := common.GenUUID()
 
 	accessToken, err := uc.tokenProvider.IssueToken(ctx, sessionID.String(), userID.String())
 	if err != nil {
-		return nil, err
+		return nil, common.ErrInternalServerError.WithDebug(err.Error())
 	}
 
 	// 4. Insert session in repo
@@ -55,7 +61,7 @@ func (uc *LoginUC) Login(ctx context.Context, dto EmailPasswordLoginDTO) (*Token
 	session := domain.NewSession(sessionID, userID, refreshToken, tokenExpAt, refreshExpAt)
 
 	if err := uc.sessionRepo.Create(ctx, session); err != nil {
-		return nil, err
+		return nil, common.ErrInternalServerError.WithDebug(err.Error())
 	}
 	// 5. return token
 

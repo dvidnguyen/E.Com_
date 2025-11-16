@@ -5,8 +5,6 @@ import (
 	"Backend/modules/user/domain"
 	"context"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 type RefreshTokenUC struct {
@@ -23,15 +21,15 @@ func NewRefreshTokenUC(userRepo UserQueryRepository, sessionRepo SessionReposito
 func (uc RefreshTokenUC) RefreshToken(ctx context.Context, refreshToken string) (*TokenResponseDTO, error) {
 	session, err := uc.sessionRepo.FindByRefreshToken(ctx, refreshToken)
 	if err != nil {
-		return nil, err
+		return nil, common.ErrBadRequest.WithError("invalid refresh token")
 	}
 	if session.RefreshExpAt().UnixNano() < time.Now().UTC().UnixNano() {
-		return nil, errors.New("refresh token expired")
+		return nil, common.ErrUnauthorized.WithError("refresh token is expired")
 	}
 
 	user, err := uc.userRepo.Find(ctx, session.UserId())
 	if err != nil {
-		return nil, err
+		return nil, common.ErrBadRequest.WithError("invalid refresh token")
 	}
 	userId := user.Id()
 	sessionId := common.GenUUID()
@@ -39,7 +37,7 @@ func (uc RefreshTokenUC) RefreshToken(ctx context.Context, refreshToken string) 
 	accessToken, err := uc.tokenProvider.IssueToken(ctx, sessionId.String(), userId.String())
 
 	if err != nil {
-		return nil, err
+		return nil, common.ErrInternalServerError.WithDebug(err.Error())
 	}
 	// 4. Insert session into DB
 	newRefreshToken, _ := uc.hasher.RandomStr(16)
@@ -49,7 +47,7 @@ func (uc RefreshTokenUC) RefreshToken(ctx context.Context, refreshToken string) 
 	newSession := domain.NewSession(sessionId, userId, newRefreshToken, tokenExpAt, refreshExpAt)
 
 	if err := uc.sessionRepo.Create(ctx, newSession); err != nil {
-		return nil, err
+		return nil, common.ErrInternalServerError.WithDebug(err.Error())
 	}
 	go func() {
 		_ = uc.sessionRepo.Delete(ctx, session.Id())

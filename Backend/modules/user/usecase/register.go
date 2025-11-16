@@ -4,7 +4,6 @@ import (
 	"Backend/common"
 	"Backend/modules/user/domain"
 	"context"
-	"fmt"
 
 	"github.com/pkg/errors"
 )
@@ -28,22 +27,22 @@ func (uc *RegisterUC) Register(ctx context.Context, dto EmailPasswordRegistratio
 	user, err := uc.userQuery.FindByEmail(ctx, dto.Email)
 
 	if user != nil {
-		return domain.ErrEmailHasExisted
+		return common.ErrorInvalidEmailPassword.WithError(domain.ErrEmailHasExisted.Error())
 	}
 
-	if err != nil && !errors.Is(err, domain.ErrEmailNotFound) {
-		return err
+	if err != nil && !errors.Is(err, common.ErrRecordNotFound) {
+		return common.ErrInternalServerError.WithDebug(err.Error())
 	}
 	salt, err := uc.hasher.RandomStr(30)
 
-	fmt.Println(salt, len(salt))
+	//fmt.Println(salt, len(salt))
 	if err != nil {
-		return err
+		return common.ErrInternalServerError.WithDebug(err.Error())
 	}
 
 	hashedPassword, err := uc.hasher.HashPassword(salt, dto.Password)
 	if err != nil {
-		return err
+		return common.ErrInternalServerError.WithDebug(err.Error())
 	}
 
 	userEntity, err := domain.NewUser(
@@ -56,11 +55,11 @@ func (uc *RegisterUC) Register(ctx context.Context, dto EmailPasswordRegistratio
 		domain.RoleUser,
 	)
 	if err != nil {
-		return err
+		return common.ErrInternalServerError.WithDebug(err.Error())
 	}
 
 	if err := uc.userCmd.Create(ctx, userEntity); err != nil {
-		return err
+		return common.ErrInternalServerError.WithDebug(err.Error())
 	}
 
 	return nil

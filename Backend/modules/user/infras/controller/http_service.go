@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"Backend/common"
 	"Backend/modules/user/usecase"
 	"net/http"
 
@@ -18,32 +19,31 @@ func (s *service) handleRegister() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var dto usecase.EmailPasswordRegistrationDTO
 		if err := c.BindJSON(&dto); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			common.WriteErrorResponse(c, err)
 			return
 		}
 
 		if err := s.uc.Register(c.Request.Context(), dto); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			common.WriteErrorResponse(c, err)
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"data": true})
+		common.WriteSuccessResponse(c, true)
 	}
 }
 func (s *service) handleLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var dto usecase.EmailPasswordLoginDTO
 		if err := c.BindJSON(&dto); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			common.WriteErrorResponse(c, err)
 			return
 		}
 		tokenResponse, err := s.uc.Login(c.Request.Context(), dto)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			common.WriteErrorResponse(c, err)
 			return
 		}
-
-		c.JSON(http.StatusOK, gin.H{"data": tokenResponse})
+		common.WriteSuccessResponse(c, tokenResponse)
 	}
 }
 func (s *service) handleRefreshToken() gin.HandlerFunc {
