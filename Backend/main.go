@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Backend/common"
 	"Backend/component"
 	"Backend/modules/user/infras/controller"
 	"Backend/modules/user/infras/repository"
@@ -42,7 +43,7 @@ func main() {
 		60*60*24*7, 60*60*24*14)
 	repoUser := repository.NewUserRepo(db)
 	repoSession := repository.NewSessionDB(db)
-	userUC := usecase.NewUseCase(&repoUser, &repoSession, &component.Hasher{}, tokenProvider)
+	userUC := usecase.NewUseCase(&repoUser, &repoSession, &common.Hasher{}, tokenProvider)
 
 	userService := controller.NewService(userUC)
 	api := r.Group("/api/v1")

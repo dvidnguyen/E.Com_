@@ -60,3 +60,10 @@ func (repo sessionDB) Delete(ctx context.Context, id uuid.UUID) error {
 	}
 	return nil
 }
+func (repo sessionDB) CountSessionByUserId(ctx context.Context, userId uuid.UUID) (int64, error) {
+	var count int64
+	if err := repo.db.Table(TbSessionName).Where("user_id = ?", userId).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
+}
