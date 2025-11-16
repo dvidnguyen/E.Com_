@@ -85,5 +85,5 @@ func (s *service) Routes(g *gin.RouterGroup) {
 	g.POST("/auth/register", s.handleRegister())
 	g.POST("/auth/authenticate", s.handleLogin())
 	g.POST("/auth/refresh-token", s.handleRefreshToken())
-	g.POST("/auth/change-password", middleware.RequireAuth(s.authClient), s.handleChangePassword())
+	g.POST("/auth/change-password", middleware.RequireAuth(s.authClient), middleware.RequireRole("user"), s.handleChangePassword())
 }
