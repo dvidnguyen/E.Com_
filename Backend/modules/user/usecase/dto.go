@@ -18,3 +18,8 @@ type TokenResponseDTO struct {
 	RefreshToken          string `json:"refresh_token"`
 	RefreshTokenExpiresAt int    `json:"refresh_exp_at"`
 }
+
+type ChangePasswordDTO struct {
+	OldPassword string `json:"old_password" binding:"required"`
+	NewPassword string `json:"new_password" binding:"required,min=8"`
+}

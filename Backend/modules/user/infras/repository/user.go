@@ -57,3 +57,9 @@ func (repo userRepository) Find(ctx context.Context, id uuid.UUID) (*domain.User
 	}
 	return dto.ToEntity()
 }
+func (repo userRepository) UpdatePassword(ctx context.Context, id uuid.UUID, newPassword string) error {
+	if err := repo.db.Table(TbName).Where("id = ?", id).Update("password", newPassword).Error; err != nil {
+		return err
+	}
+	return nil
+}

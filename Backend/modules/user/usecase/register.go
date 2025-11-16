@@ -30,10 +30,10 @@ func (uc *RegisterUC) Register(ctx context.Context, dto EmailPasswordRegistratio
 		return common.ErrorInvalidEmailPassword.WithError(domain.ErrEmailHasExisted.Error())
 	}
 
-	if err != nil && !errors.Is(err, common.ErrRecordNotFound) {
+	if err != nil && errors.Is(err, common.ErrRecordNotFound) {
 		return common.ErrInternalServerError.WithDebug(err.Error())
 	}
-	salt, err := uc.hasher.RandomStr(30)
+	salt, err := uc.hasher.RandomStr(16)
 
 	//fmt.Println(salt, len(salt))
 	if err != nil {

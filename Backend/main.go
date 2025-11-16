@@ -3,6 +3,7 @@ package main
 import (
 	"Backend/common"
 	"Backend/component"
+	"Backend/middleware"
 	"Backend/modules/user/infras/controller"
 	"Backend/modules/user/infras/repository"
 	"Backend/modules/user/usecase"
@@ -45,9 +46,20 @@ func main() {
 	repoSession := repository.NewSessionDB(db)
 	userUC := usecase.NewUseCase(&repoUser, &repoSession, &common.Hasher{}, tokenProvider)
 
-	userService := controller.NewService(userUC)
+	introspectUC := usecase.NewIntrospectUC(&repoUser, repoSession, tokenProvider)
+	//userService := controller.NewService(userUC)
+	userService := controller.NewService(userUC, introspectUC)
 	api := r.Group("/api/v1")
+
 	userService.Routes(api)
+
+	authClient := usecase.NewIntrospectUC(&repoUser, repoSession, tokenProvider)
+	r.GET("/pang", middleware.RequireAuth(authClient), func(c *gin.Context) {
+		// Return JSON response
+		c.JSON(http.StatusOK, gin.H{
+			"message": "peng",
+		})
+	})
 	// Start server on port 8080 (default)
 	// Server will listen on 0.0.0.0:8080 (localhost:8080 on Windows)
 	r.Run(":8081")
