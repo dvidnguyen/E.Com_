@@ -8,9 +8,8 @@ CREATE TABLE IF NOT EXISTS `users` (
     `email` VARCHAR(100) NOT NULL,
     `password` VARCHAR(100) NOT NULL,
     `phone` VARCHAR(15) NULL,
-    -- THAY ĐỔI: Chuyển sang ENUM
     `role` ENUM('user', 'admin') NOT NULL DEFAULT 'user',
-    `salt` VARCHAR(20) NULL,
+    `salt` VARCHAR(50) NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -18,9 +17,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `categories` (
-    -- THAY ĐỔI: Chuyển ID sang mã code (VARCHAR)
                                             `id` VARCHAR(50) NOT NULL,
-    -- THAY ĐỔI: Khóa ngoại tự tham chiếu cũng phải là VARCHAR
     `category_id` VARCHAR(50) NULL,
     `name` VARCHAR(150) NOT NULL,
     `slug` VARCHAR(150) NOT NULL,
@@ -37,7 +34,6 @@ CREATE TABLE IF NOT EXISTS `promotions` (
     `description` TEXT NULL,
     `start_date` TIMESTAMP NULL,
     `end_date` TIMESTAMP NULL,
-    -- THAY ĐỔI: Chuyển sang ENUM
     `status` ENUM('active', 'inactive', 'scheduled', 'expired') NOT NULL DEFAULT 'scheduled',
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -64,22 +60,37 @@ CREATE TABLE IF NOT EXISTS `user_sessions` (
     `refresh_token` VARCHAR(50) NULL,
     `refresh_exp_at` TIMESTAMP NULL,
     `access_exp_at` TIMESTAMP NULL,
-    -- THAY ĐỔI: Thêm timestamps
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ===== BẢNG MỚI BẠN YÊU CẦU =====
+CREATE TABLE IF NOT EXISTS `user_addresses` (
+                                                `id` CHAR(36) NOT NULL,
+    `user_id` CHAR(36) NOT NULL,
+    `address_name` VARCHAR(100) NULL, -- Tên gợi nhớ (ví dụ: "Nhà", "Công ty")
+    `full_name` VARCHAR(100) NOT NULL, -- Tên người nhận
+    `phone` VARCHAR(15) NOT NULL,
+    `street_address` VARCHAR(255) NOT NULL, -- Địa chỉ cụ thể (số nhà, tên đường)
+    `ward` VARCHAR(100) NULL, -- Phường / Xã
+    `district` VARCHAR(100) NOT NULL, -- Quận / Huyện
+    `city` VARCHAR(100) NOT NULL, -- Tỉnh / Thành phố
+    `is_default` BOOLEAN NOT NULL DEFAULT FALSE, -- Đánh dấu địa chỉ mặc định
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- ===================================
+
 CREATE TABLE IF NOT EXISTS `products` (
                                           `id` CHAR(36) NOT NULL,
-    -- THAY ĐỔI: Phải khớp với kiểu dữ liệu mới của categories.id
     `category_id` VARCHAR(50) NULL,
     `name` VARCHAR(150) NOT NULL,
     `content` TEXT NULL,
-    -- THAY ĐỔI: Chuyển sang ENUM
     `publish_status` ENUM('draft', 'published', 'archived') NOT NULL DEFAULT 'draft',
-    -- THAY ĐỔI: Chuyển sang ENUM
     `activity_status` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -100,7 +111,6 @@ CREATE TABLE IF NOT EXISTS `vouchers` (
     `usage_limit_per_user` INT NULL,
     `start_date` TIMESTAMP NULL,
     `end_date` TIMESTAMP NULL,
-    -- THAY ĐỔI: Chuyển sang ENUM
     `status` ENUM('active', 'inactive', 'expired', 'used_up') NOT NULL DEFAULT 'active',
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -120,7 +130,6 @@ CREATE TABLE IF NOT EXISTS `product_variants` (
     `price` DECIMAL(15,2) NOT NULL,
     `color` VARCHAR(50) NULL,
     `quantity` INT NOT NULL DEFAULT 0,
-    -- THAY ĐỔI: Chuyển sang ENUM (active/inactive thay vì out of stock, vì quantity = 0 đã thể hiện out of stock)
     `activity_status` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -134,7 +143,6 @@ CREATE TABLE IF NOT EXISTS `orders` (
     `user_id` CHAR(36) NOT NULL,
     `voucher_id` CHAR(36) NULL,
     `order_code` VARCHAR(250) NULL,
-    -- THAY ĐỔI: Chuyển sang ENUM
     `status` ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded') NOT NULL DEFAULT 'pending',
     `subtotal_amount` DECIMAL(15,2) NULL,
     `discount_amount` DECIMAL(15,2) NULL,
@@ -151,9 +159,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- THAY ĐỔI: Bảng Carts và Cart Items (Thiết kế lại)
--- Bảng 'carts_items' cũ của bạn bị thiếu thông tin quan trọng.
--- Đây là cấu trúc đúng cho giỏ hàng.
+-- Bảng Carts và Cart Items
 -- ----------------------------
 
 CREATE TABLE IF NOT EXISTS `carts` (
@@ -189,7 +195,6 @@ CREATE TABLE IF NOT EXISTS `images` (
     `product_variant_id` CHAR(36) NOT NULL,
     `img_name` VARCHAR(250) NULL,
     `img_url` VARCHAR(250) NULL,
-    -- THAY ĐỔI: Chuyển sang ENUM
     `status` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
     `file_name` VARCHAR(150) NULL,
     `file_size` INT NULL,
@@ -202,13 +207,11 @@ CREATE TABLE IF NOT EXISTS `images` (
 CREATE TABLE IF NOT EXISTS `orders_items` (
                                               `id` CHAR(36) NOT NULL,
     `order_id` CHAR(36) NOT NULL,
-    -- THAY ĐỔI: Sửa lại toàn bộ cột cho đúng logic
     `product_variant_id` CHAR(36) NOT NULL,
     `quantity` INT NOT NULL,
     `price_at_purchase` DECIMAL(15,2) NOT NULL, -- Lưu lại giá tại thời điểm mua
     `product_name` VARCHAR(150) NULL, -- (Tùy chọn) Lưu lại tên
     `product_sku` VARCHAR(20) NULL, -- (Tùy chọn) Lưu lại SKU
--- Kết thúc thay đổi
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
