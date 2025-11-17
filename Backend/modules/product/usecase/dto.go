@@ -7,31 +7,31 @@ import (
 )
 
 type CreateCategoryDTO struct {
-	Name        string
-	Description *string    // Dùng con trỏ vì có thể NULL
-	ImageURL    *string    // Dùng con trỏ vì có thể NULL
-	ParentID    *uuid.UUID // (danh mục gốc)
-	SortOrder   int
+	Name        string     `json:"name" binding:"required"`
+	Description *string    `json:"description"`
+	ImageURL    *string    `json:"image_url"`
+	ParentID    *uuid.UUID `json:"parent_id"`
+	SortOrder   int        `json:"sort_order"`
 }
 
 type UpdateCategoryDTO struct {
-	Name        *string // Dùng con trỏ để biết trường nào cần update
-	Description *string
-	ImageURL    *string
-	ParentID    *uuid.UUID
-	Status      *domain.Status // Dùng con trỏ domain.Status
-	SortOrder   *int
+	Name        *string        `json:"name"`
+	Description *string        `json:"description"`
+	ImageURL    *string        `json:"image_url"`
+	ParentID    *uuid.UUID     `json:"parent_id"`
+	Status      *domain.Status `json:"status"`
+	SortOrder   *int           `json:"sort_order"`
 }
 
 // CategoryNodeDTO là DTO cho đầu ra dạng cây (như hình ảnh bạn gửi)
 type CategoryNodeDTO struct {
-	ID           uuid.UUID
-	Name         string
-	Slug         string
-	ParentID     *uuid.UUID
-	ProductCount int
-	Status       string             // Trả về string cho JSON
-	Children     []*CategoryNodeDTO // Đệ quy để tạo cây
+	ID           uuid.UUID          `json:"id"`
+	Name         string             `json:"name"`
+	Slug         string             `json:"slug"`
+	ParentID     *uuid.UUID         `json:"parent_id"`
+	ProductCount int                `json:"product_count"`
+	Status       string             `json:"status"`
+	Children     []*CategoryNodeDTO `json:"children"`
 }
 
 // CategoryDetailDTO cho chi tiết một category

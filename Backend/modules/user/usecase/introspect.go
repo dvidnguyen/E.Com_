@@ -35,7 +35,7 @@ func (uc *IntrospectUC) IntrospectToken(ctx context.Context, accessToken string)
 	sessionId := uuid.MustParse(claims.ID)
 	// check session
 	if _, err := uc.sessionQueryRepo.Find(ctx, sessionId.String()); err != nil {
-		return nil, common.ErrInternalServerError.WithDebug(err.Error())
+		return nil, common.ErrBadRequest.WithError("token invalid")
 	}
 
 	user, err := uc.userQueryRepo.Find(ctx, userId)
