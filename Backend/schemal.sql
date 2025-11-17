@@ -50,6 +50,21 @@ CREATE TABLE IF NOT EXISTS `analytics_daily_revenue` (
     PRIMARY KEY (`report_date`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ===== BẢNG MỚI: COLLECTIONS =====
+CREATE TABLE IF NOT EXISTS `collections` (
+                                             `id` CHAR(36) NOT NULL,
+    `name` VARCHAR(150) NOT NULL,
+    `slug` VARCHAR(150) NOT NULL,
+    `description` TEXT NULL,
+    `image_url` VARCHAR(255) NULL, -- Ảnh banner cho bộ sưu tập
+    `status` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `idx_slug_collections` (`slug`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- ================================
+
 -- ----------------------------
 -- Tạo các bảng phụ thuộc cấp 1
 -- ----------------------------
@@ -66,24 +81,22 @@ CREATE TABLE IF NOT EXISTS `user_sessions` (
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ===== BẢNG MỚI BẠN YÊU CẦU =====
 CREATE TABLE IF NOT EXISTS `user_addresses` (
                                                 `id` CHAR(36) NOT NULL,
     `user_id` CHAR(36) NOT NULL,
-    `address_name` VARCHAR(100) NULL, -- Tên gợi nhớ (ví dụ: "Nhà", "Công ty")
-    `full_name` VARCHAR(100) NOT NULL, -- Tên người nhận
+    `address_name` VARCHAR(100) NULL,
+    `full_name` VARCHAR(100) NOT NULL,
     `phone` VARCHAR(15) NOT NULL,
-    `street_address` VARCHAR(255) NOT NULL, -- Địa chỉ cụ thể (số nhà, tên đường)
-    `ward` VARCHAR(100) NULL, -- Phường / Xã
-    `district` VARCHAR(100) NOT NULL, -- Quận / Huyện
-    `city` VARCHAR(100) NOT NULL, -- Tỉnh / Thành phố
-    `is_default` BOOLEAN NOT NULL DEFAULT FALSE, -- Đánh dấu địa chỉ mặc định
+    `street_address` VARCHAR(255) NOT NULL,
+    `ward` VARCHAR(100) NULL,
+    `district` VARCHAR(100) NOT NULL,
+    `city` VARCHAR(100) NOT NULL,
+    `is_default` BOOLEAN NOT NULL DEFAULT FALSE,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
--- ===================================
 
 CREATE TABLE IF NOT EXISTS `products` (
                                           `id` CHAR(36) NOT NULL,
@@ -138,6 +151,18 @@ CREATE TABLE IF NOT EXISTS `product_variants` (
     FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ===== BẢNG MỚI: BẢNG TRUNG GIAN PRODUCT_COLLECTIONS =====
+CREATE TABLE IF NOT EXISTS `product_collections` (
+                                                     `product_id` CHAR(36) NOT NULL,
+    `collection_id` CHAR(36) NOT NULL,
+    `sort_order` INT NOT NULL DEFAULT 0, -- Để admin sắp xếp thứ tự sản phẩm trong bộ sưu tập
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`product_id`, `collection_id`),
+    FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- ========================================================
+
 CREATE TABLE IF NOT EXISTS `orders` (
                                         `id` CHAR(36) NOT NULL,
     `user_id` CHAR(36) NOT NULL,
@@ -168,21 +193,21 @@ CREATE TABLE IF NOT EXISTS `carts` (
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `idx_user_id` (`user_id`), -- Mỗi user chỉ có 1 giỏ hàng
+    UNIQUE KEY `idx_user_id` (`user_id`),
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `cart_items` (
                                             `id` CHAR(36) NOT NULL,
     `cart_id` CHAR(36) NOT NULL,
-    `product_variant_id` CHAR(36) NOT NULL, -- Đây là link tới SKU
+    `product_variant_id` CHAR(36) NOT NULL,
     `quantity` INT NOT NULL DEFAULT 1,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`) ON DELETE CASCADE,
     FOREIGN KEY (`product_variant_id`) REFERENCES `product_variants` (`id`) ON DELETE CASCADE,
-    UNIQUE KEY `idx_cart_variant` (`cart_id`, `product_variant_id`) -- Đảm bảo 1 sản phẩm chỉ có 1 dòng trong giỏ
+    UNIQUE KEY `idx_cart_variant` (`cart_id`, `product_variant_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -209,14 +234,14 @@ CREATE TABLE IF NOT EXISTS `orders_items` (
     `order_id` CHAR(36) NOT NULL,
     `product_variant_id` CHAR(36) NOT NULL,
     `quantity` INT NOT NULL,
-    `price_at_purchase` DECIMAL(15,2) NOT NULL, -- Lưu lại giá tại thời điểm mua
-    `product_name` VARCHAR(150) NULL, -- (Tùy chọn) Lưu lại tên
-    `product_sku` VARCHAR(20) NULL, -- (Tùy chọn) Lưu lại SKU
+    `price_at_purchase` DECIMAL(15,2) NOT NULL,
+    `product_name` VARCHAR(150) NULL,
+    `product_sku` VARCHAR(20) NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`product_variant_id`) REFERENCES `product_variants` (`id`) ON DELETE SET NULL -- SET NULL để nếu sản phẩm bị xóa thì vẫn giữ lại lịch sử đơn hàng
+    FOREIGN KEY (`product_variant_id`) REFERENCES `product_variants` (`id`) ON DELETE SET NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `feedbacks` (

@@ -12,6 +12,7 @@ type UseCase interface {
 	Login(ctx context.Context, dto EmailPasswordLoginDTO) (*TokenResponseDTO, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*TokenResponseDTO, error)
 	ChangePassword(ctx context.Context, dto ChangePasswordDTO, userId uuid.UUID) error
+	//Logout(ctx context.Context, dto LogoutDTO) error
 }
 
 type TokenProvider interface {
@@ -31,6 +32,7 @@ type useCase struct {
 	*LoginUC
 	*RefreshTokenUC
 	*ChangePasswordUC
+	//*LogUC
 }
 
 func NewUseCase(repoUser UserRepository, repoSession SessionRepository, hasher Hasher, tokenProvider TokenProvider) *useCase {

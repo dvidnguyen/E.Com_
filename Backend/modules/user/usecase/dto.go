@@ -23,3 +23,7 @@ type ChangePasswordDTO struct {
 	OldPassword string `json:"old_password" binding:"required"`
 	NewPassword string `json:"new_password" binding:"required,min=8"`
 }
+
+type LogoutDTO struct {
+	SessionId string `json:"session_id" binding:"required,uuid"`
+}
