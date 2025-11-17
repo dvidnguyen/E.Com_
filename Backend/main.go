@@ -7,6 +7,12 @@ import (
 	"Backend/modules/user/infras/controller"
 	"Backend/modules/user/infras/repository"
 	"Backend/modules/user/usecase"
+
+	// Product module imports
+	productController "Backend/modules/product/infras/controller"
+	productRepository "Backend/modules/product/infras/repository"
+	productUsecase "Backend/modules/product/usecase"
+
 	"log"
 	"net/http"
 	"os"
@@ -49,9 +55,17 @@ func main() {
 	introspectUC := usecase.NewIntrospectUC(&repoUser, repoSession, tokenProvider)
 	//userService := controller.NewService(userUC)
 	userService := controller.NewService(userUC, introspectUC)
+
+	// Product/Category module setup
+	categoryQueryRepo := productRepository.NewCategoryQueryRepository(db)
+	categoryCmdRepo := productRepository.NewCategoryCmdRepository(db)
+	categoryUC := productUsecase.NewCategoryUC(categoryQueryRepo, categoryCmdRepo)
+	categoryService := productController.NewCategoryService(categoryUC, introspectUC)
+
 	api := r.Group("/api/v1")
 
 	userService.Routes(api)
+	categoryService.Routes(api)
 
 	authClient := usecase.NewIntrospectUC(&repoUser, repoSession, tokenProvider)
 	r.GET("/pang", middleware.RequireAuth(authClient), func(c *gin.Context) {

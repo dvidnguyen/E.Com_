@@ -25,7 +25,7 @@ func (r *userRepository) FindByEmail(ctx context.Context, email string) (*domain
 
 	if err := r.db.Table(TbName).Where("email = ?", email).First(&dto).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, domain.ErrEmailNotFound
+			return nil, domain.ErrInvalidEmailPassword
 		}
 		return nil, err
 	}

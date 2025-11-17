@@ -16,17 +16,23 @@ CREATE TABLE IF NOT EXISTS `users` (
     UNIQUE KEY `idx_email` (`email`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ===== CẬP NHẬT BẢNG 'CATEGORIES' =====
 CREATE TABLE IF NOT EXISTS `categories` (
-                                            `id` VARCHAR(50) NOT NULL,
-    `category_id` VARCHAR(50) NULL,
+                                            `id` CHAR(36) NOT NULL, -- CẬP NHẬT: Đổi sang CHAR(36)
+    `category_id` CHAR(36) NULL, -- CẬP NHẬT: Đổi sang CHAR(36) (tự tham chiếu)
     `name` VARCHAR(150) NOT NULL,
     `slug` VARCHAR(150) NOT NULL,
+    `description` TEXT NULL, -- THÊM MỚI
+    `image_url` VARCHAR(255) NULL, -- THÊM MỚI
+    `is_active` BOOLEAN NOT NULL DEFAULT TRUE, -- THÊM MỚI
+    `sort_order` INT NOT NULL DEFAULT 0, -- THÊM MỚI
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY `idx_slug` (`slug`),
     FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- =======================================
 
 CREATE TABLE IF NOT EXISTS `promotions` (
                                             `id` CHAR(36) NOT NULL,
@@ -66,7 +72,6 @@ CREATE TABLE IF NOT EXISTS `user_sessions` (
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ===== BẢNG MỚI BẠN YÊU CẦU =====
 CREATE TABLE IF NOT EXISTS `user_addresses` (
                                                 `id` CHAR(36) NOT NULL,
     `user_id` CHAR(36) NOT NULL,
@@ -83,11 +88,10 @@ CREATE TABLE IF NOT EXISTS `user_addresses` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
--- ===================================
 
 CREATE TABLE IF NOT EXISTS `products` (
                                           `id` CHAR(36) NOT NULL,
-    `category_id` VARCHAR(50) NULL,
+    `category_id` CHAR(36) NULL,
     `name` VARCHAR(150) NOT NULL,
     `content` TEXT NULL,
     `publish_status` ENUM('draft', 'published', 'archived') NOT NULL DEFAULT 'draft',
@@ -138,6 +142,7 @@ CREATE TABLE IF NOT EXISTS `product_variants` (
     FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ===== CẬP NHẬT BẢNG 'ORDERS' =====
 CREATE TABLE IF NOT EXISTS `orders` (
                                         `id` CHAR(36) NOT NULL,
     `user_id` CHAR(36) NOT NULL,
@@ -149,6 +154,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
     `shipping_fee` DECIMAL(15, 2) NULL,
     `total_amount` DECIMAL(15,2) NOT NULL,
     `payment_method` VARCHAR(50) NULL,
+    `shipping_full_name` VARCHAR(100) NULL, -- THÊM MỚI: Tên người nhận
     `shipping_address` VARCHAR(250) NULL,
     `phone` VARCHAR(15) NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -157,6 +163,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
     FOREIGN KEY (`voucher_id`) REFERENCES `vouchers` (`id`) ON DELETE SET NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- ===================================
 
 -- ----------------------------
 -- Bảng Carts và Cart Items
