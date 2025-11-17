@@ -143,7 +143,7 @@ func (s *categoryService) Routes(g *gin.RouterGroup) {
 	{
 		adminGroup.GET("/categories/tree", s.handleGetCategoriesTree())
 		adminGroup.POST("", s.handleCreateCategory())
-		adminGroup.PUT("/:id", s.handleUpdateCategory())
+		adminGroup.PATCH("/:id", s.handleUpdateCategory())
 		adminGroup.DELETE("/:id", s.handleDeleteCategory())
 	}
 }
