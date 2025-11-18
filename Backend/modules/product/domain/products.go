@@ -11,6 +11,7 @@ type Products struct {
 	categoryId     *uuid.UUID
 	name           string
 	content        *string
+	skuPrefix      string
 	publishStatus  PublishStatus
 	activityStatus ActivityStatus
 }
@@ -20,6 +21,7 @@ func NewProducts(
 	categoryId *uuid.UUID,
 	name string,
 	content *string,
+	skuPrefix string,
 	publishStatus PublishStatus,
 	activityStatus ActivityStatus,
 ) *Products {
@@ -28,6 +30,7 @@ func NewProducts(
 		categoryId:     categoryId,
 		name:           name,
 		content:        content,
+		skuPrefix:      skuPrefix,
 		publishStatus:  publishStatus,
 		activityStatus: activityStatus,
 	}
@@ -48,6 +51,10 @@ func (p *Products) Name() string {
 
 func (p *Products) Content() *string {
 	return p.content
+}
+
+func (p *Products) SkuPrefix() string {
+	return p.skuPrefix
 }
 
 func (p *Products) PublishStatus() PublishStatus {
@@ -73,6 +80,10 @@ func (p *Products) SetName(name string) {
 
 func (p *Products) SetContent(content *string) {
 	p.content = content
+}
+
+func (p *Products) SetSkuPrefix(skuPrefix string) {
+	p.skuPrefix = skuPrefix
 }
 
 func (p *Products) SetPublishStatus(publishStatus PublishStatus) {

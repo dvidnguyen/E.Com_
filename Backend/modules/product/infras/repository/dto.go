@@ -52,6 +52,7 @@ type ProductDTO struct {
 	CategoryID     *uuid.UUID `gorm:"type:char(36);index;column:category_id" json:"categoryId,omitempty"`
 	Name           string     `gorm:"type:varchar(200);not null;column:name" json:"name"`
 	Content        *string    `gorm:"type:text;column:content" json:"content,omitempty"`
+	SKUPrefix      string     `gorm:"type:varchar(20);not null;column:sku_prefix" json:"skuPrefix"`
 	PublishStatus  string     `gorm:"type:enum('draft','published','archived');not null;default:'draft';column:publish_status" json:"publishStatus"`
 	ActivityStatus string     `gorm:"type:enum('active','inactive');not null;default:'active';column:activity_status" json:"activityStatus"`
 }
@@ -63,6 +64,7 @@ func (dto ProductDTO) ToDomain() *domain.Products {
 		dto.CategoryID,
 		dto.Name,
 		dto.Content,
+		dto.SKUPrefix,
 		domain.GetPublishStatus(dto.PublishStatus),
 		domain.GetActivityStatus(dto.ActivityStatus),
 	)
@@ -75,6 +77,7 @@ func FromProductDomain(product *domain.Products) ProductDTO {
 		CategoryID:     product.CategoryId(),
 		Name:           product.Name(),
 		Content:        product.Content(),
+		SKUPrefix:      product.SkuPrefix(),
 		PublishStatus:  product.PublishStatus().String(),
 		ActivityStatus: product.ActivityStatus().String(),
 	}

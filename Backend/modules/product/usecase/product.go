@@ -60,6 +60,7 @@ func (uc *ProductUC) CreateProduct(ctx context.Context, input *CreateProductDTO)
 		input.CategoryID,
 		input.Name,
 		input.Content,
+		input.SKUPrefix,
 		publishStatus,
 		activityStatus,
 	)
@@ -140,6 +141,7 @@ func (uc *ProductUC) GetProductByID(ctx context.Context, id uuid.UUID) (*Product
 		CategoryName:   categoryName,
 		Name:           product.Name(),
 		Content:        product.Content(),
+		SKUPrefix:      product.SkuPrefix(),
 		PublishStatus:  product.PublishStatus().String(),
 		ActivityStatus: product.ActivityStatus().String(),
 		Variants:       variantDTOs,
@@ -199,6 +201,7 @@ func (uc *ProductUC) ListProducts(ctx context.Context) ([]*ProductListItemDTO, e
 			CategoryID:     product.CategoryId(),
 			CategoryName:   categoryName,
 			Name:           product.Name(),
+			SKUPrefix:      product.SkuPrefix(),
 			PublishStatus:  product.PublishStatus().String(),
 			ActivityStatus: product.ActivityStatus().String(),
 			VariantCount:   variantCount,

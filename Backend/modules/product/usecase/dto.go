@@ -103,6 +103,7 @@ type ProductDetailDTO struct {
 	CategoryName   *string                   `json:"category_name,omitempty"`
 	Name           string                    `json:"name"`
 	Content        *string                   `json:"content"`
+	SKUPrefix      string                    `json:"sku_prefix"`
 	PublishStatus  string                    `json:"publish_status"`
 	ActivityStatus string                    `json:"activity_status"`
 	Variants       []ProductVariantDetailDTO `json:"variants"`
@@ -116,6 +117,7 @@ type ProductListItemDTO struct {
 	CategoryID     *uuid.UUID `json:"category_id"`
 	CategoryName   *string    `json:"category_name,omitempty"`
 	Name           string     `json:"name"`
+	SKUPrefix      string     `json:"sku_prefix"`
 	PublishStatus  string     `json:"publish_status"`
 	ActivityStatus string     `json:"activity_status"`
 	VariantCount   int        `json:"variant_count"`

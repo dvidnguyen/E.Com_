@@ -94,6 +94,7 @@ CREATE TABLE IF NOT EXISTS `products` (
     `category_id` CHAR(36) NULL,
     `name` VARCHAR(150) NOT NULL,
     `content` TEXT NULL,
+    `sku_prefix` VARCHAR(20) NOT NULL,
     `publish_status` ENUM('draft', 'published', 'archived') NOT NULL DEFAULT 'draft',
     `activity_status` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
