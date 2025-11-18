@@ -60,18 +60,24 @@ func main() {
 	//userService := controller.NewService(userUC)
 	userService := controller.NewService(userUC, introspectUC)
 
-	// Product/Category module setup
+	// Product module setup
 	categoryQueryRepo := productRepository.NewCategoryQueryRepository(db)
 	categoryCmdRepo := productRepository.NewCategoryCmdRepository(db)
-	categoryUC := productUsecase.NewCategoryUC(categoryQueryRepo, categoryCmdRepo)
-	categoryService := productController.NewCategoryService(categoryUC, introspectUC)
+	productQueryRepo := productRepository.NewProductQueryRepository(db)
+	productCmdRepo := productRepository.NewProductCmdRepository(db)
+	variantQueryRepo := productRepository.NewProductVariantQueryRepository(db)
+	variantCmdRepo := productRepository.NewProductVariantCmdRepository(db)
+
+	productUC := productUsecase.NewUseCase(categoryQueryRepo, categoryCmdRepo,
+		productQueryRepo, productCmdRepo, variantQueryRepo, variantCmdRepo)
+	categoryService := productController.NewCategoryService(productUC, introspectUC)
+	productService := productController.NewProductService(productUC, introspectUC)
 
 	api := r.Group("/api/v1")
 
 	userService.Routes(api)
 	categoryService.Routes(api)
-
-	//authClient := usecase.NewIntrospectUC(&repoUser, repoSession, tokenProvider)
+	productService.Routes(api) //authClient := usecase.NewIntrospectUC(&repoUser, repoSession, tokenProvider)
 	//r.GET("/pang", middleware.RequireAuth(authClient), func(c *gin.Context) {
 	//	// Return JSON response
 	//	c.JSON(http.StatusOK, gin.H{

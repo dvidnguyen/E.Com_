@@ -10,11 +10,11 @@ import (
 )
 
 type categoryService struct {
-	uc         *usecase.CategoryUC
+	uc         usecase.UseCase
 	authClient middleware.AuthClient
 }
 
-func NewCategoryService(uc *usecase.CategoryUC, authClient middleware.AuthClient) *categoryService {
+func NewCategoryService(uc usecase.UseCase, authClient middleware.AuthClient) *categoryService {
 	return &categoryService{
 		uc:         uc,
 		authClient: authClient,
