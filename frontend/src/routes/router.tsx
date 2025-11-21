@@ -4,6 +4,8 @@ import AdminLayout from '@/components/admin/layout/AdminLayout';
 import { PageLoadingSpinner } from '@/components/ui/loading-spinner';
 import { createLazyComponent } from '@/utils/lazy-loading';
 import ErrorPage from '@/pages/error/ErrorPage';
+import SignupPage from '@/pages/auth/Login';
+import RegisterPage from '@/pages/auth/Regis';
 
 // Lazy load các components với preloading capabilities
 const DashboardPage = createLazyComponent(() => import('@/pages/admin/dashboard/DashboardPage'));
@@ -67,6 +69,14 @@ export const router = createBrowserRouter([
         element: withSuspense(OrderDetailPage)
       }
     ]
+  },
+  {
+    path: '/authenticate',
+    element: <SignupPage />
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />
   },
   {
     path: '/',

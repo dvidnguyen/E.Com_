@@ -3,7 +3,7 @@
 -- ----------------------------
 
 CREATE TABLE IF NOT EXISTS `users` (
-                                       `id` CHAR(36) NOT NULL,
+    `id` CHAR(36) NOT NULL,
     `user_name` VARCHAR(100) NULL,
     `email` VARCHAR(100) NOT NULL,
     `password` VARCHAR(100) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY `idx_email` (`email`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;    
 
 -- ===== CẬP NHẬT BẢNG 'CATEGORIES' =====
 CREATE TABLE IF NOT EXISTS `categories` (
