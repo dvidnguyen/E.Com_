@@ -255,3 +255,14 @@ CREATE TABLE IF NOT EXISTS `voucher_usages` (
     FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
     FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- Bảng quản lý Banner chạy Slide (Hero Section)
+CREATE TABLE IF NOT EXISTS `banners` (
+    `id` CHAR(36) NOT NULL,
+    `title` VARCHAR(255) NULL, -- Tên banner (để admin quản lý)
+    `image_url` VARCHAR(255) NOT NULL, -- Link ảnh
+    `link_to` VARCHAR(255) NULL, -- Click vào thì nhảy đến đâu (ví dụ: /category/dien-tu)
+    `position` INT NOT NULL DEFAULT 0, -- Thứ tự hiển thị (1, 2, 3...)
+    `is_active` BOOLEAN NOT NULL DEFAULT TRUE,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

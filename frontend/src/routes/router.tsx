@@ -16,6 +16,8 @@ const InventoryPage = createLazyComponent(() => import('@/pages/admin/products/I
 const OrderListPage = createLazyComponent(() => import('@/pages/admin/orders/OrderListPage'));
 const OrderDetailPage = createLazyComponent(() => import('@/pages/admin/orders/OrderDetailPage'));
 
+// Client Pages - Temporary placeholder
+
 // Wrapper component để bọc Suspense cho từng lazy component
 const withSuspense = (Component: React.ComponentType) => {
   return (
@@ -80,7 +82,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <div>Client Landing Page</div>
+    element: <div>Homepage</div>
   },
   {
     path: '/*',

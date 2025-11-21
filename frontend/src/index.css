@@ -109,7 +109,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: oklch(0.588 0.15 225.04);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -177,4 +177,72 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Line Clamp Utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+/* Hide Scrollbar Utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* MegaMart Colors */
+.text-mega-blue {
+  color: #008ECC;
+}
+
+.bg-mega-blue {
+  background-color: #008ECC;
+}
+
+.border-mega-blue {
+  border-color: #008ECC;
+}
+
+.bg-mega-light {
+  background-color: #F3F9FB;
+}
+
+.text-mega-green {
+  color: #22C55E;
+}
+
+.text-price-red {
+  color: #ff424e;
+}
+
+.bg-page {
+  background-color: #F5F5FA;
+}
+
+.bg-block {
+  background-color: #FFFFFF;
 }
